@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض أسعار تفاعلي مع مساعد Gemini</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Corporate -->
+    <!-- Application Structure Plan: تم إعادة تصميم التطبيق ليعكس الفصل بين باقات إدارة الإعلانات وخدمات الإنتاج. الهيكل الجديد يعتمد على خطوتين: 1. اختيار باقة إعلانية أساسية (عبر أزرار الراديو). 2. إضافة خدمات إنتاج المحتوى كخيارات إضافية (عبر مربعات الاختيار). هذا التصميم يوفر مرونة أكبر للعميل لتكوين عرضه المخصص ويتوافق مع هيكل التسعير الجديد. تم إزالة المساعد الذكي لتبسيط الواجهة والتركيز على الخيارات المباشرة. -->
+    <!-- Visualization & Content Choices: 
+        - معلومات التقرير: باقات إدارة الإعلانات. -> الهدف: اختيار باقة أساسية. -> طريقة العرض: بطاقتان مع أزرار راديو، مع قائمة مميزات واضحة لكل باقة. -> التفاعل: اختيار باقة واحدة إجبارية لتفعيل عرض السعر. -> المبرر: يمثل الخدمة الأساسية التي يبنى عليها العرض، وتفاصيل المميزات تزيد من شفافية العرض. -> المكتبة/الطريقة: Vanilla JS.
+        - معلومات التقرير: خدمات إنتاج المحتوى. -> الهدف: إضافة خدمات اختيارية. -> طريقة العرض: قائمة من الخدمات مع مربعات اختيار. -> التفاعل: يمكن للعميل تحديد أي عدد من الخدمات الإضافية، ويتم تحديث السعر الإجمالي فورًا. -> المبرر: يوفر مرونة وتخصيصًا للباقة. -> المكتبة/الطريقة: Vanilla JS.
+        - معلومات التقرير: السعر الإجمالي والطلب. -> الهدف: عرض التكلفة النهائية وتسهيل الطلب. -> طريقة العرض: ملخص جانبي محدث تلقائيًا وزر واتساب. -> التفاعل: يتم تحديث السعر مع كل تغيير، وينشئ زر واتساب رسالة مفصلة بالباقة (ومميزاتها) والخدمات المختارة. -> المبرر: يوفر شفافية فورية ويسهل عملية التواصل لإتمام الطلب. -> المكتبة/الطريقة: Vanilla JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .custom-radio:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .custom-radio:checked::before {
+            content: '';
+            display: block;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background-color: white;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+        .custom-checkbox:checked {
+             background-color: #2563eb;
+             border-color: #2563eb;
+        }
+        .ai-loader {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto px-4 py-8 md:px-8 md:py-12">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">عرض أسعار تفاعلي</h1>
+            <p class="mt-4 text-lg text-slate-600">كوّن باقتك المثالية بمساعدة خبيرنا الذكي</p>
+        </header>
+
+        <!-- Gemini Service Selection Assistant -->
+        <section id="gemini-assistant" class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">💡</span>
+                مساعد اختيار الخدمات (مدعوم بـ Gemini)
+            </h2>
+            <p class="text-slate-600 mb-4">صف لنا نشاطك التجاري، وسيقوم مساعدنا الذكي باقتراح الباقة والخدمات الأنسب لك.</p>
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" id="recommendation-prompt" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" placeholder="مثال: مطعم برجر يقدم وجبات عالية الجودة ويريد جذب الشباب">
+                <button id="get-recommendation-btn" class="bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center gap-2 shrink-0">
+                    <span id="recommendation-btn-text">الحصول على توصية</span>
+                    <div id="recommendation-loader" class="ai-loader hidden"></div>
+                </button>
+            </div>
+        </section>
+
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Service Selection Panel -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl shadow-lg">
+                <h2 class="text-2xl font-bold mb-6 border-b pb-4">كوّن باقتك الخاصة</h2>
+
+                <!-- Ad Management Packages -->
+                <section>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-700">1. اختر باقة إدارة الإعلانات الممولة</h3>
+                    <div id="packages-container" class="space-y-4">
+                        <!-- Packages will be injected here by JS -->
+                    </div>
+                </section>
+
+                <!-- Content Production Services -->
+                <section class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-700">2. أضف خدمات إنتاج المحتوى</h3>
+                    <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Services will be injected here by JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Quote Summary -->
+            <aside class="lg:col-span-1 h-fit sticky top-8">
+                 <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h2 class="text-2xl font-bold mb-6 border-b pb-4">ملخص عرض السعر</h2>
+                    <div id="quote-summary" class="space-y-3 min-h-[100px] text-slate-600">
+                        <p class="italic">الرجاء اختيار باقة للبدء...</p>
+                    </div>
+                    <div class="border-t mt-6 pt-6">
+                        <div class="flex justify-between items-center text-2xl font-bold">
+                            <span class="text-slate-800">الإجمالي:</span>
+                            <span id="total-price" class="text-blue-600">0.00 ر.س</span>
+                        </div>
+                    </div>
+                    <a id="whatsapp-link" href="#" target="_blank" class="block text-center w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        اطلب الخدمة الآن عبر واتساب
+                    </a>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = {
+                packages: [
+                    { 
+                        id: 'pkg_basic_ad', 
+                        name: 'الباقة الأساسية', 
+                        price: 5200, 
+                        platforms: 'تيك توك، سناب شات، ميتا',
+                        features: [
+                            'إعداد الحملة',
+                            'إدارة ومتابعة الأداء',
+                            'إعداد التقارير'
+                        ],
+                        full_features: [
+                            'إعداد الحملة',
+                            'إدارة ومتابعة الأداء',
+                            'إعداد التقارير'
+                        ]
+                    },
+                    { 
+                        id: 'pkg_comprehensive_ad', 
+                        name: 'الباقة الشاملة', 
+                        price: 8250, 
+                        platforms: 'تيك توك، سناب شات، ميتا، تويتر (X)، إعلانات Google',
+                        features: [ // For display
+                            'إعداد الحملة',
+                            'إدارة ومتابعة الأداء',
+                            'إعداد التقارير',
+                            'إعلانات تويتر (X)',
+                            'إعلانات Google (بحث، يوتيوب، شبكة إعلانية)'
+                        ],
+                        full_features: [ // For WhatsApp
+                            'إعداد الحملة',
+                            'إدارة ومتابعة الأداء',
+                            'إعداد التقارير',
+                            'إعلانات تويتر (X)',
+                            'إعلانات Google:',
+                            '  - بحث Google (نتائج البحث، خرائط، Shopping)',
+                            '  - يوتيوب (مقاطع الفيديو، صفحة النتائج)',
+                            '  - شبكة Google الإعلانية (مواقع، تطبيقات، Gmail)'
+                        ]
+                    }
+                ],
+                services: [
+                    { id: 'srv_drone', name: 'تصوير درون', price: 1400 },
+                    { id: 'srv_video', name: 'تصوير فيديو عادي', price: 1200 },
+                    { id: 'srv_montage_normal', name: 'مونتاج عادي', price: 850 },
+                    { id: 'srv_montage_gfx', name: 'مونتاج جرافيكس', price: 1300 },
+                    { id: 'srv_vo_human', name: 'تعليق صوتي (بشري)', price: 800 },
+                    { id: 'srv_vo_ai', name: 'تعليق صوتي (ذكاء اصطناعي)', price: 400 }
+                ]
+            };
+
+            const packagesContainer = document.getElementById('packages-container');
+            const servicesContainer = document.getElementById('services-container');
+            const quoteSummary = document.getElementById('quote-summary');
+            const totalPriceEl = document.getElementById('total-price');
+            
+            const getRecommendationBtn = document.getElementById('get-recommendation-btn');
+            const recommendationPromptInput = document.getElementById('recommendation-prompt');
+            const recommendationBtnText = document.getElementById('recommendation-btn-text');
+            const recommendationLoader = document.getElementById('recommendation-loader');
+
+            function renderItems() {
+                // Render Ad Management Packages
+                packagesContainer.innerHTML = data.packages.map(pkg => {
+                    let adSetupOption;
+                    if (pkg.id === 'pkg_comprehensive_ad') {
+                        adSetupOption = `
+                            <div class="mt-3 pt-3 border-t border-slate-200">
+                                <label for="setup-${pkg.id}" class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="setup-${pkg.id}" name="ad_setup" value="500" class="custom-checkbox appearance-none w-5 h-5 border-2 border-slate-300 rounded" data-name="إنشاء الحسابات الإعلانية (خصم 50%)">
+                                    <div class="mr-3 w-full">
+                                        <span class="font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية</span>
+                                        <div class="text-xs text-green-600 font-bold">عرض خاص مع الباقة الشاملة!</div>
+                                    </div>
+                                    <span class="mr-auto font-bold text-sm flex items-center gap-2 shrink-0">
+                                        <span class="line-through text-gray-400">1000</span>
+                                        <span class="text-green-600">500 ر.س</span>
+                                    </span>
+                                </label>
+                            </div>
+                        `;
+                    } else {
+                        adSetupOption = `
+                            <div class="mt-3 pt-3 border-t border-slate-200">
+                                <label for="setup-${pkg.id}" class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="setup-${pkg.id}" name="ad_setup" value="1000" class="custom-checkbox appearance-none w-5 h-5 border-2 border-slate-300 rounded" data-name="إنشاء الحسابات الإعلانية">
+                                    <span class="mr-3 font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية</span>
+                                    <span class="mr-auto font-bold text-slate-700 text-sm shrink-0">+1000 ر.س</span>
+                                </label>
+                            </div>
+                        `;
+                    }
+
+                    return `
+                        <label for="${pkg.id}" class="block p-4 border rounded-lg cursor-pointer hover:border-blue-500 transition-colors duration-200 has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500">
+                            <div class="flex items-start">
+                                <input type="radio" id="${pkg.id}" name="package" value="${pkg.price}" class="mt-1 custom-radio appearance-none w-6 h-6 border-2 border-slate-300 rounded-full relative shrink-0" data-name="${pkg.name}">
+                                <div class="mr-4 w-full">
+                                    <span class="font-bold text-lg">${pkg.name}</span>
+                                    <p class="text-sm text-slate-500">المنصات: ${pkg.platforms}</p>
+                                    <ul class="mt-3 mb-3 text-sm text-slate-600 space-y-2 border-t pt-3">
+                                        ${pkg.features.map(f => `<li class="flex items-center"><svg class="w-4 h-4 text-green-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>${f}</li>`).join('')}
+                                    </ul>
+                                    ${adSetupOption}
+                                    <p class="text-md font-bold text-blue-600 mt-4 text-left">${pkg.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</p>
+                                </div>
+                            </div>
+                        </label>
+                    `;
+                }).join('');
+
+                // Render Content Production Services
+                servicesContainer.innerHTML = data.services.map(srv => `
+                    <label for="${srv.id}" class="flex items-center p-4 border rounded-lg cursor-pointer hover:border-blue-500 transition-colors duration-200 has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500">
+                        <input type="checkbox" id="${srv.id}" name="service" value="${srv.price}" class="custom-checkbox appearance-none w-5 h-5 border-2 border-slate-300 rounded" data-name="${srv.name}">
+                        <span class="mr-3 font-semibold">${srv.name}</span>
+                        <span class="mr-auto font-bold text-slate-700">${srv.price.toLocaleString('en-US')} ر.س</span>
+                    </label>
+                `).join('');
+
+                addEventListeners();
+            }
+
+            function updateQuote() {
+                let total = 0;
+                let summaryHTML = '';
+                let messageItems = [];
+                
+                const selectedPackage = document.querySelector('input[name="package"]:checked');
+                if (selectedPackage) {
+                    const price = parseFloat(selectedPackage.value);
+                    const packageId = selectedPackage.id;
+                    const packageData = data.packages.find(p => p.id === packageId);
+                    
+                    total += price;
+                    summaryHTML += `<div class="flex justify-between items-center"><span>باقة الإعلانات: ${packageData.name}</span><span class="font-medium">${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</span></div>`;
+                    
+                    let packageMessage = `*باقة إدارة الإعلانات: ${packageData.name}*\n`;
+                    packageMessage += packageData.full_features.map(f => `  - ${f}`).join('\n');
+                    
+                    const adSetupCheckbox = document.querySelector(`#setup-${packageId}:checked`);
+                    if (adSetupCheckbox) {
+                        const setupPrice = parseFloat(adSetupCheckbox.value);
+                        const setupName = adSetupCheckbox.dataset.name;
+                        total += setupPrice;
+                        summaryHTML += `<div class="flex justify-between items-center text-sm"><span>${setupName}</span><span class="font-medium">${setupPrice.toLocaleString('en-US')} ر.س</span></div>`;
+                        packageMessage += `\n  - ${setupName}`;
+                    }
+
+                    messageItems.push(packageMessage);
+                }
+
+                const selectedServices = document.querySelectorAll('input[name="service"]:checked');
+                if (selectedServices.length > 0) {
+                    messageItems.push('\n*خدمات إنتاج المحتوى:*');
+                    selectedServices.forEach(service => {
+                        const price = parseFloat(service.value);
+                        const name = service.dataset.name;
+                        total += price;
+                        summaryHTML += `<div class="flex justify-between items-center text-sm"><span>${name}</span><span class="font-medium">${price.toLocaleString('en-US')} ر.س</span></div>`;
+                        messageItems.push(`- ${name}`);
+                    });
+                }
+
+                const whatsappLink = document.getElementById('whatsapp-link');
+                const phoneNumber = '966557379255';
+
+                if (summaryHTML === '') {
+                    quoteSummary.innerHTML = '<p class="italic">الرجاء اختيار باقة للبدء...</p>';
+                    const defaultMessage = encodeURIComponent('مرحباً، أرغب في الاستفسار عن خدماتكم.');
+                    whatsappLink.href = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
+                } else {
+                    quoteSummary.innerHTML = summaryHTML;
+                    const finalMessage = `مرحباً،\n\nأرغب في طلب الخدمات التالية:\n\n${messageItems.join('\n')}\n\n*الإجمالي:* ${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س`;
+                    whatsappLink.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`;
+                }
+                
+                totalPriceEl.textContent = `${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س`;
+            }
+
+            async function getServiceRecommendation() {
+                const userPrompt = recommendationPromptInput.value;
+                if (!userPrompt) {
+                    recommendationPromptInput.placeholder = "الرجاء إدخال وصف لنشاطك التجاري أولاً!";
+                    setTimeout(() => {
+                        recommendationPromptInput.placeholder = "مثال: مطعم برجر يقدم وجبات عالية الجودة ويريد جذب الشباب";
+                    }, 2000);
+                    return;
+                }
+
+                recommendationBtnText.classList.add('hidden');
+                recommendationLoader.classList.remove('hidden');
+                getRecommendationBtn.disabled = true;
+
+                const fullPrompt = `As a marketing expert, analyze the following business description and recommend the most suitable package and services. Business: '${userPrompt}'.
+
+                Use this information for your recommendation:
+                Packages:
+                - Basic (id: 'pkg_basic_ad'): For new businesses or limited budgets.
+                - Comprehensive (id: 'pkg_comprehensive_ad'): For growth and wider reach.
+
+                Decide if 'Ad Account Setup' is needed (ad_account_setup_recommended: true/false).
+
+                Services:
+                - Drone Photography (id: 'srv_drone')
+                - Standard Video (id: 'srv_video')
+                - Normal Editing (id: 'srv_montage_normal')
+                - Graphics Editing (id: 'srv_montage_gfx')
+                - Human Voiceover (id: 'srv_vo_human')
+                - AI Voiceover (id: 'srv_vo_ai')`;
+                
+                const schema = {
+                    type: "OBJECT",
+                    properties: {
+                        "recommended_package_id": { "type": "STRING" },
+                        "ad_account_setup_recommended": { "type": "BOOLEAN" },
+                        "recommended_service_ids": { 
+                            "type": "ARRAY",
+                            "items": { "type": "STRING" }
+                        }
+                    },
+                    required: ["recommended_package_id", "ad_account_setup_recommended", "recommended_service_ids"]
+                };
+
+                try {
+                    const maxRetries = 3;
+                    const initialDelay = 1000; // 1 second
+
+                    for (let attempt = 0; attempt < maxRetries; attempt++) {
+                        let chatHistory = [{ role: "user", parts: [{ text: fullPrompt }] }];
+                        const payload = { 
+                            contents: chatHistory,
+                            generationConfig: {
+                                responseMimeType: "application/json",
+                                responseSchema: schema
+                            }
+                        };
+                        const apiKey = "AIzaSyAXJB9gC0Z9Mky5raHe-gUOnPD5hK7gDfk"; 
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                        
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        // If the request was successful, process the data and exit the function.
+                        if (response.ok) {
+                            const result = await response.json();
+                            if (result.candidates && result.candidates.length > 0 &&
+                                result.candidates[0].content && result.candidates[0].content.parts &&
+                                result.candidates[0].content.parts.length > 0) {
+                                
+                                const jsonText = result.candidates[0].content.parts[0].text;
+                                const parsedJson = JSON.parse(jsonText);
+                                
+                                // Apply recommendations
+                                const packageRadio = document.getElementById(parsedJson.recommended_package_id);
+                                 if (packageRadio) {
+                                    packageRadio.checked = true;
+                                }
+                                
+                                document.querySelectorAll('input[name="ad_setup"]').forEach(chk => chk.checked = false);
+                                if (parsedJson.ad_account_setup_recommended) {
+                                    const setupCheckbox = document.getElementById(`setup-${parsedJson.recommended_package_id}`);
+                                    if(setupCheckbox) setupCheckbox.checked = true;
+                                }
+
+                                document.querySelectorAll('input[name="service"]').forEach(chk => chk.checked = false);
+                                if (parsedJson.recommended_service_ids && Array.isArray(parsedJson.recommended_service_ids)) {
+                                    parsedJson.recommended_service_ids.forEach(serviceId => {
+                                        const serviceCheckbox = document.getElementById(serviceId);
+                                        if (serviceCheckbox) {
+                                            serviceCheckbox.checked = true;
+                                        }
+                                    });
+                                }
+                                
+                                updateQuote();
+                                return; // Success, exit the function. The 'finally' block will still run.
+                            } else {
+                                // If the response is OK but the content is missing, treat it as a final error.
+                                throw new Error("لم يتم العثور على محتوى في استجابة الـ API أو أن الاستجابة فارغة.");
+                            }
+                        }
+
+                        // Handle non-OK responses
+                        // If the server is busy (503) and we have retries left, wait and try again.
+                        if (response.status === 503 && attempt < maxRetries - 1) {
+                            const delay = initialDelay * Math.pow(2, attempt);
+                            console.warn(`API is busy (503). Retrying in ${delay}ms... (Attempt ${attempt + 1}/${maxRetries})`);
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            continue; // Go to the next iteration of the loop
+                        } else {
+                            // For other errors or if it's the last failed attempt, throw an error to exit the loop.
+                            const errorBody = await response.text();
+                            console.error("API Error Response:", errorBody);
+                            throw new Error(`فشل طلب الـ API مع الحالة: ${response.status}`);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error in getServiceRecommendation:", error);
+                    // You can optionally show a user-facing error message here.
+                } finally {
+                    // This block will always run, ensuring the UI is reset correctly.
+                    recommendationBtnText.classList.remove('hidden');
+                    recommendationLoader.classList.add('hidden');
+                    getRecommendationBtn.disabled = false;
+                }
+            }
+
+
+            function addEventListeners() {
+                const inputs = document.querySelectorAll('input[name="package"], input[name="ad_setup"], input[name="service"]');
+                inputs.forEach(input => input.addEventListener('change', updateQuote));
+                getRecommendationBtn.addEventListener('click', getServiceRecommendation);
+            }
+
+            renderItems();
+            updateQuote();
+        });
+    </script>
+</body>
+</html>
