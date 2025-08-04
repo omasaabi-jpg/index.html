@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عرض أسعار تفاعلي مع مساعد Gemini</title>
+    <title>شركة ايوان المستقبل للعقار والاعمار</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -58,7 +58,7 @@
 
     <div class="container mx-auto px-4 py-8 md:px-8 md:py-12">
         <header class="text-center mb-10">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">عرض أسعار تفاعلي</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">شركة ايوان المستقبل للعقار والاعمار</h1>
             <p class="mt-4 text-lg text-slate-600">كوّن باقتك المثالية بمساعدة خبيرنا الذكي</p>
         </header>
 
@@ -66,7 +66,7 @@
         <section id="gemini-assistant" class="bg-white p-6 rounded-2xl shadow-lg mb-8">
             <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-blue-500">💡</span>
-                مساعد اختيار الخدمات (مدعوم بـ Gemini)
+                مساعد اختيار الخدمات (AI)
             </h2>
             <p class="text-slate-600 mb-4">صف لنا نشاطك التجاري، وسيقوم مساعدنا الذكي باقتراح الباقة والخدمات الأنسب لك.</p>
             <div class="flex flex-col sm:flex-row gap-2">
@@ -87,15 +87,23 @@
 
                 <!-- Ad Management Packages -->
                 <section>
-                    <h3 class="text-xl font-semibold mb-4 text-slate-700">1. اختر باقة إدارة الإعلانات الممولة</h3>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-700">1. باقات إدارة الإعلانات <span class="text-sm font-normal text-slate-500">(رسوم شهرية)</span></h3>
                     <div id="packages-container" class="space-y-4">
-                        <!-- Packages will be injected here by JS -->
+                        <!-- Ad Packages will be injected here by JS -->
+                    </div>
+                </section>
+
+                <!-- Social Media Management Package -->
+                <section class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4 text-slate-700">2. باقات إدارة السوشل ميديا <span class="text-sm font-normal text-slate-500">(رسوم شهرية)</span></h3>
+                    <div id="social-packages-container" class="space-y-4">
+                        <!-- Social Media Packages will be injected here by JS -->
                     </div>
                 </section>
 
                 <!-- Content Production Services -->
                 <section class="mt-8">
-                    <h3 class="text-xl font-semibold mb-4 text-slate-700">2. أضف خدمات إنتاج المحتوى</h3>
+                    <h3 class="text-xl font-semibold mb-4 text-slate-700">3. خدمات إنتاج المحتوى <span class="text-sm font-normal text-slate-500">(دفعة لمرة واحدة)</span></h3>
                     <div id="services-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <!-- Services will be injected here by JS -->
                     </div>
@@ -107,12 +115,12 @@
                  <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <h2 class="text-2xl font-bold mb-6 border-b pb-4">ملخص عرض السعر</h2>
                     <div id="quote-summary" class="space-y-3 min-h-[100px] text-slate-600">
-                        <p class="italic">الرجاء اختيار باقة للبدء...</p>
+                        <p class="italic">الرجاء اختيار باقة أو خدمة للبدء...</p>
                     </div>
                     <div class="border-t mt-6 pt-6">
-                        <div class="flex justify-between items-center text-2xl font-bold">
-                            <span class="text-slate-800">الإجمالي:</span>
-                            <span id="total-price" class="text-blue-600">0.00 ر.س</span>
+                        <div class="flex justify-between items-start text-xl font-bold">
+                            <span class="text-slate-800 pt-1">الإجمالي:</span>
+                            <div id="total-price" class="text-blue-600 text-left leading-tight">0.00 ر.س</div>
                         </div>
                     </div>
                     <a id="whatsapp-link" href="#" target="_blank" class="block text-center w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg mt-6 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
@@ -129,7 +137,7 @@
                 packages: [
                     { 
                         id: 'pkg_basic_ad', 
-                        name: 'الباقة الأساسية', 
+                        name: 'الباقة الأساسية للإعلانات', 
                         price: 5200, 
                         platforms: 'تيك توك، سناب شات، ميتا',
                         features: [
@@ -145,7 +153,7 @@
                     },
                     { 
                         id: 'pkg_comprehensive_ad', 
-                        name: 'الباقة الشاملة', 
+                        name: 'الباقة الشاملة للإعلانات', 
                         price: 8250, 
                         platforms: 'تيك توك، سناب شات، ميتا، تويتر (X)، إعلانات Google',
                         features: [ // For display
@@ -167,6 +175,28 @@
                         ]
                     }
                 ],
+                socialPackages: [
+                    {
+                        id: 'pkg_social_media',
+                        name: 'باقة إدارة السوشل ميديا',
+                        price: 2499,
+                        platforms: 'سناب شات، انستقرام، تيك توك، اكس، فيس بوك (5 منصات)',
+                        features: [
+                            '21 منشور شهرياً',
+                            '4 فيديوهات ريلز شهرياً',
+                            'تصاميم احترافية',
+                            'محتوى كتابي إبداعي',
+                            'جدولة ونشر المحتوى'
+                        ],
+                        full_features: [ // For WhatsApp
+                            '21 منشور شهرياً',
+                            '4 فيديوهات ريلز شهرياً',
+                            'تصاميم احترافية للمنشورات',
+                            'محتوى كتابي إبداعي مع الأفكار',
+                            'جدولة ونشر المحتوى على 5 منصات (سناب، انستقرام، تيك توك، اكس، فيس بوك)'
+                        ]
+                    }
+                ],
                 services: [
                     { id: 'srv_drone', name: 'تصوير درون', price: 1400 },
                     { id: 'srv_video', name: 'تصوير فيديو عادي', price: 1200 },
@@ -178,6 +208,7 @@
             };
 
             const packagesContainer = document.getElementById('packages-container');
+            const socialPackagesContainer = document.getElementById('social-packages-container');
             const servicesContainer = document.getElementById('services-container');
             const quoteSummary = document.getElementById('quote-summary');
             const totalPriceEl = document.getElementById('total-price');
@@ -197,7 +228,7 @@
                                 <label for="setup-${pkg.id}" class="flex items-center cursor-pointer">
                                     <input type="checkbox" id="setup-${pkg.id}" name="ad_setup" value="500" class="custom-checkbox appearance-none w-5 h-5 border-2 border-slate-300 rounded" data-name="إنشاء الحسابات الإعلانية (خصم 50%)">
                                     <div class="mr-3 w-full">
-                                        <span class="font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية</span>
+                                        <span class="font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية <span class="text-xs text-slate-400">(مرة واحدة)</span></span>
                                         <div class="text-xs text-green-600 font-bold">عرض خاص مع الباقة الشاملة!</div>
                                     </div>
                                     <span class="mr-auto font-bold text-sm flex items-center gap-2 shrink-0">
@@ -212,7 +243,7 @@
                             <div class="mt-3 pt-3 border-t border-slate-200">
                                 <label for="setup-${pkg.id}" class="flex items-center cursor-pointer">
                                     <input type="checkbox" id="setup-${pkg.id}" name="ad_setup" value="1000" class="custom-checkbox appearance-none w-5 h-5 border-2 border-slate-300 rounded" data-name="إنشاء الحسابات الإعلانية">
-                                    <span class="mr-3 font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية</span>
+                                    <span class="mr-3 font-semibold text-sm">إضافة خدمة إنشاء الحسابات الإعلانية <span class="text-xs text-slate-400">(مرة واحدة)</span></span>
                                     <span class="mr-auto font-bold text-slate-700 text-sm shrink-0">+1000 ر.س</span>
                                 </label>
                             </div>
@@ -230,12 +261,29 @@
                                         ${pkg.features.map(f => `<li class="flex items-center"><svg class="w-4 h-4 text-green-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>${f}</li>`).join('')}
                                     </ul>
                                     ${adSetupOption}
-                                    <p class="text-md font-bold text-blue-600 mt-4 text-left">${pkg.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</p>
+                                    <p class="text-md font-bold text-blue-600 mt-4 text-left">${pkg.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س/شهرياً</p>
                                 </div>
                             </div>
                         </label>
                     `;
                 }).join('');
+                
+                // Render Social Media Management Packages
+                socialPackagesContainer.innerHTML = data.socialPackages.map(pkg => `
+                    <label for="${pkg.id}" class="block p-4 border rounded-lg cursor-pointer hover:border-blue-500 transition-colors duration-200 has-[:checked]:bg-blue-50 has-[:checked]:border-blue-500">
+                        <div class="flex items-start">
+                            <input type="checkbox" id="${pkg.id}" name="social_package" value="${pkg.price}" class="mt-1 custom-checkbox appearance-none w-6 h-6 border-2 border-slate-300 rounded shrink-0" data-name="${pkg.name}">
+                            <div class="mr-4 w-full">
+                                <span class="font-bold text-lg">${pkg.name}</span>
+                                <p class="text-sm text-slate-500">${pkg.platforms}</p>
+                                <ul class="mt-3 mb-3 text-sm text-slate-600 space-y-2 border-t pt-3">
+                                    ${pkg.features.map(f => `<li class="flex items-center"><svg class="w-4 h-4 text-green-500 mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>${f}</li>`).join('')}
+                                </ul>
+                                <p class="text-md font-bold text-blue-600 mt-4 text-left">${pkg.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س/شهرياً</p>
+                            </div>
+                        </div>
+                    </label>
+                `).join('');
 
                 // Render Content Production Services
                 servicesContainer.innerHTML = data.services.map(srv => `
@@ -250,9 +298,11 @@
             }
 
             function updateQuote() {
-                let total = 0;
+                let monthlyTotal = 0;
+                let oneTimeTotal = 0;
                 let summaryHTML = '';
-                let messageItems = [];
+                let whatsappMonthlyItems = [];
+                let whatsappOneTimeItems = [];
                 
                 const selectedPackage = document.querySelector('input[name="package"]:checked');
                 if (selectedPackage) {
@@ -260,33 +310,46 @@
                     const packageId = selectedPackage.id;
                     const packageData = data.packages.find(p => p.id === packageId);
                     
-                    total += price;
-                    summaryHTML += `<div class="flex justify-between items-center"><span>باقة الإعلانات: ${packageData.name}</span><span class="font-medium">${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</span></div>`;
+                    monthlyTotal += price;
+                    summaryHTML += `<div class="flex justify-between items-center"><span>${packageData.name}</span><span class="font-medium">${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</span></div>`;
                     
-                    let packageMessage = `*باقة إدارة الإعلانات: ${packageData.name}*\n`;
+                    let packageMessage = `*${packageData.name}:*\n`;
                     packageMessage += packageData.full_features.map(f => `  - ${f}`).join('\n');
+                    whatsappMonthlyItems.push(packageMessage);
                     
                     const adSetupCheckbox = document.querySelector(`#setup-${packageId}:checked`);
                     if (adSetupCheckbox) {
                         const setupPrice = parseFloat(adSetupCheckbox.value);
                         const setupName = adSetupCheckbox.dataset.name;
-                        total += setupPrice;
-                        summaryHTML += `<div class="flex justify-between items-center text-sm"><span>${setupName}</span><span class="font-medium">${setupPrice.toLocaleString('en-US')} ر.س</span></div>`;
-                        packageMessage += `\n  - ${setupName}`;
+                        oneTimeTotal += setupPrice;
+                        summaryHTML += `<div class="flex justify-between items-center text-sm pl-4"><span>${setupName} <span class="text-xs text-slate-400">(مرة واحدة)</span></span><span class="font-medium">${setupPrice.toLocaleString('en-US')} ر.س</span></div>`;
+                        whatsappOneTimeItems.push(`- ${setupName}`);
                     }
+                }
 
-                    messageItems.push(packageMessage);
+                const selectedSocialPackage = document.querySelector('input[name="social_package"]:checked');
+                if (selectedSocialPackage) {
+                    const price = parseFloat(selectedSocialPackage.value);
+                    const packageId = selectedSocialPackage.id;
+                    const packageData = data.socialPackages.find(p => p.id === packageId);
+                    
+                    monthlyTotal += price;
+                    summaryHTML += `<div class="flex justify-between items-center mt-2"><span>${packageData.name}</span><span class="font-medium">${price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س</span></div>`;
+                    
+                    let packageMessage = `*${packageData.name}:*\n`;
+                    packageMessage += packageData.full_features.map(f => `  - ${f}`).join('\n');
+                    whatsappMonthlyItems.push(packageMessage);
                 }
 
                 const selectedServices = document.querySelectorAll('input[name="service"]:checked');
                 if (selectedServices.length > 0) {
-                    messageItems.push('\n*خدمات إنتاج المحتوى:*');
+                    summaryHTML += `<div class="font-semibold mt-2">خدمات لمرة واحدة:</div>`;
                     selectedServices.forEach(service => {
                         const price = parseFloat(service.value);
                         const name = service.dataset.name;
-                        total += price;
-                        summaryHTML += `<div class="flex justify-between items-center text-sm"><span>${name}</span><span class="font-medium">${price.toLocaleString('en-US')} ر.س</span></div>`;
-                        messageItems.push(`- ${name}`);
+                        oneTimeTotal += price;
+                        summaryHTML += `<div class="flex justify-between items-center text-sm pl-4"><span>${name}</span><span class="font-medium">${price.toLocaleString('en-US')} ر.س</span></div>`;
+                        whatsappOneTimeItems.push(`- ${name}`);
                     });
                 }
 
@@ -294,16 +357,48 @@
                 const phoneNumber = '966557379255';
 
                 if (summaryHTML === '') {
-                    quoteSummary.innerHTML = '<p class="italic">الرجاء اختيار باقة للبدء...</p>';
+                    quoteSummary.innerHTML = '<p class="italic">الرجاء اختيار باقة أو خدمة للبدء...</p>';
+                    totalPriceEl.innerHTML = '0.00 ر.س';
                     const defaultMessage = encodeURIComponent('مرحباً، أرغب في الاستفسار عن خدماتكم.');
                     whatsappLink.href = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
                 } else {
                     quoteSummary.innerHTML = summaryHTML;
-                    const finalMessage = `مرحباً،\n\nأرغب في طلب الخدمات التالية:\n\n${messageItems.join('\n')}\n\n*الإجمالي:* ${total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ر.س`;
+                    
+                    let totalHTML = '';
+                    let whatsappTotalString = '';
+                    const grandTotal = monthlyTotal + oneTimeTotal;
+
+                    if (monthlyTotal > 0) {
+                        totalHTML += `<div>${monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س/شهرياً</div>`;
+                        whatsappTotalString += `${monthlyTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س/شهرياً`;
+                    }
+                    if (oneTimeTotal > 0) {
+                        totalHTML += `<div class="text-base font-medium text-slate-600">+ ${oneTimeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س (مرة واحدة)</div>`;
+                         if(whatsappTotalString !== '') whatsappTotalString += ' + ';
+                         whatsappTotalString += `${oneTimeTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س (مرة واحدة)`;
+                    }
+                    
+                    if (monthlyTotal > 0 && oneTimeTotal > 0) {
+                        totalHTML += `<div class="border-t border-dashed my-2"></div>`;
+                        totalHTML += `<div class="text-sm text-slate-800">إجمالي الدفعة الأولى: <span class="font-bold">${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س</span></div>`;
+                    }
+
+                    totalPriceEl.innerHTML = totalHTML;
+
+                    let finalMessage = 'مرحباً،\n\nأرغب في طلب الخدمات التالية:\n';
+                    if (whatsappMonthlyItems.length > 0) {
+                        finalMessage += '\n*الرسوم الشهرية:*\n' + whatsappMonthlyItems.join('\n\n');
+                    }
+                    if (whatsappOneTimeItems.length > 0) {
+                        if(whatsappMonthlyItems.length > 0) finalMessage += '\n';
+                        finalMessage += '\n*رسوم لمرة واحدة:*\n' + whatsappOneTimeItems.join('\n');
+                    }
+                    finalMessage += `\n\n*التكلفة الإجمالية:* ${whatsappTotalString}`;
+                     if (monthlyTotal > 0 && oneTimeTotal > 0) {
+                         finalMessage += `\n*إجمالي الدفعة الأولى (الشهر الأول):* ${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س`;
+                    }
                     whatsappLink.href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`;
                 }
-                
-                totalPriceEl.textContent = `${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ر.س`;
             }
 
             async function getServiceRecommendation() {
@@ -320,34 +415,42 @@
                 recommendationLoader.classList.remove('hidden');
                 getRecommendationBtn.disabled = true;
 
-                const fullPrompt = `As a marketing expert, analyze the following business description and recommend the most suitable package and services. Business: '${userPrompt}'.
+                const fullPrompt = `As a marketing expert, analyze the following business description and recommend the most suitable package(s) and services. Business: '${userPrompt}'.
 
+                Your goal is to create a complete marketing solution.
+                
                 Use this information for your recommendation:
-                Packages:
+                1. Ad Packages (for paid campaigns):
                 - Basic (id: 'pkg_basic_ad'): For new businesses or limited budgets.
                 - Comprehensive (id: 'pkg_comprehensive_ad'): For growth and wider reach.
 
-                Decide if 'Ad Account Setup' is needed (ad_account_setup_recommended: true/false).
+                2. Social Media Management Package (for organic content):
+                - Social Media Management (id: 'pkg_social_media'): For businesses that need full content creation and posting management. Recommend this if the business needs consistent online presence.
 
-                Services:
+                3. Decide if 'Ad Account Setup' is needed (ad_account_setup_recommended: true/false). Only recommend if an Ad Package is also recommended.
+
+                4. Additional Services (for content creation):
                 - Drone Photography (id: 'srv_drone')
                 - Standard Video (id: 'srv_video')
                 - Normal Editing (id: 'srv_montage_normal')
                 - Graphics Editing (id: 'srv_montage_gfx')
                 - Human Voiceover (id: 'srv_vo_human')
-                - AI Voiceover (id: 'srv_vo_ai')`;
+                - AI Voiceover (id: 'srv_vo_ai')
+                
+                A business might need an Ad package, a Social Media package, or both. Recommend additional services only if they complement the chosen package(s).`;
                 
                 const schema = {
                     type: "OBJECT",
                     properties: {
-                        "recommended_package_id": { "type": "STRING" },
+                        "recommended_ad_package_id": { "type": "STRING" },
+                        "recommended_social_package_id": { "type": "STRING" },
                         "ad_account_setup_recommended": { "type": "BOOLEAN" },
                         "recommended_service_ids": { 
                             "type": "ARRAY",
                             "items": { "type": "STRING" }
                         }
                     },
-                    required: ["recommended_package_id", "ad_account_setup_recommended", "recommended_service_ids"]
+                    required: ["recommended_ad_package_id", "recommended_social_package_id", "ad_account_setup_recommended", "recommended_service_ids"]
                 };
 
                 try {
@@ -372,7 +475,6 @@
                             body: JSON.stringify(payload)
                         });
 
-                        // If the request was successful, process the data and exit the function.
                         if (response.ok) {
                             const result = await response.json();
                             if (result.candidates && result.candidates.length > 0 &&
@@ -382,19 +484,25 @@
                                 const jsonText = result.candidates[0].content.parts[0].text;
                                 const parsedJson = JSON.parse(jsonText);
                                 
+                                // Reset all selections
+                                document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => input.checked = false);
+
                                 // Apply recommendations
-                                const packageRadio = document.getElementById(parsedJson.recommended_package_id);
-                                 if (packageRadio) {
-                                    packageRadio.checked = true;
+                                const adPackageRadio = document.getElementById(parsedJson.recommended_ad_package_id);
+                                if (adPackageRadio) {
+                                    adPackageRadio.checked = true;
+                                    adPackageRadio.wasChecked = true; // Set wasChecked for radio toggle logic
+                                    if (parsedJson.ad_account_setup_recommended) {
+                                        const setupCheckbox = document.getElementById(`setup-${parsedJson.recommended_ad_package_id}`);
+                                        if(setupCheckbox) setupCheckbox.checked = true;
+                                    }
                                 }
                                 
-                                document.querySelectorAll('input[name="ad_setup"]').forEach(chk => chk.checked = false);
-                                if (parsedJson.ad_account_setup_recommended) {
-                                    const setupCheckbox = document.getElementById(`setup-${parsedJson.recommended_package_id}`);
-                                    if(setupCheckbox) setupCheckbox.checked = true;
+                                const socialPackageCheckbox = document.getElementById(parsedJson.recommended_social_package_id);
+                                if (socialPackageCheckbox) {
+                                    socialPackageCheckbox.checked = true;
                                 }
 
-                                document.querySelectorAll('input[name="service"]').forEach(chk => chk.checked = false);
                                 if (parsedJson.recommended_service_ids && Array.isArray(parsedJson.recommended_service_ids)) {
                                     parsedJson.recommended_service_ids.forEach(serviceId => {
                                         const serviceCheckbox = document.getElementById(serviceId);
@@ -405,22 +513,18 @@
                                 }
                                 
                                 updateQuote();
-                                return; // Success, exit the function. The 'finally' block will still run.
+                                return; 
                             } else {
-                                // If the response is OK but the content is missing, treat it as a final error.
                                 throw new Error("لم يتم العثور على محتوى في استجابة الـ API أو أن الاستجابة فارغة.");
                             }
                         }
 
-                        // Handle non-OK responses
-                        // If the server is busy (503) and we have retries left, wait and try again.
                         if (response.status === 503 && attempt < maxRetries - 1) {
                             const delay = initialDelay * Math.pow(2, attempt);
                             console.warn(`API is busy (503). Retrying in ${delay}ms... (Attempt ${attempt + 1}/${maxRetries})`);
                             await new Promise(resolve => setTimeout(resolve, delay));
-                            continue; // Go to the next iteration of the loop
+                            continue;
                         } else {
-                            // For other errors or if it's the last failed attempt, throw an error to exit the loop.
                             const errorBody = await response.text();
                             console.error("API Error Response:", errorBody);
                             throw new Error(`فشل طلب الـ API مع الحالة: ${response.status}`);
@@ -428,9 +532,7 @@
                     }
                 } catch (error) {
                     console.error("Error in getServiceRecommendation:", error);
-                    // You can optionally show a user-facing error message here.
                 } finally {
-                    // This block will always run, ensuring the UI is reset correctly.
                     recommendationBtnText.classList.remove('hidden');
                     recommendationLoader.classList.add('hidden');
                     getRecommendationBtn.disabled = false;
@@ -439,8 +541,24 @@
 
 
             function addEventListeners() {
-                const inputs = document.querySelectorAll('input[name="package"], input[name="ad_setup"], input[name="service"]');
-                inputs.forEach(input => input.addEventListener('change', updateQuote));
+                const inputs = document.querySelectorAll('input[name="package"], input[name="ad_setup"], input[name="social_package"], input[name="service"]');
+                inputs.forEach(input => {
+                    if(input.name === 'package') {
+                        input.addEventListener('click', (e) => {
+                            // Uncheck if clicking the same radio button again
+                            if (e.currentTarget.wasChecked) {
+                                e.currentTarget.checked = false;
+                                e.currentTarget.wasChecked = false;
+                            } else {
+                                document.querySelectorAll('input[name="package"]').forEach(radio => radio.wasChecked = false);
+                                e.currentTarget.wasChecked = true;
+                            }
+                            updateQuote();
+                        });
+                    } else {
+                       input.addEventListener('change', updateQuote);
+                    }
+                });
                 getRecommendationBtn.addEventListener('click', getServiceRecommendation);
             }
 
